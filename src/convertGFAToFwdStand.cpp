@@ -90,6 +90,7 @@ int main(int argc, char** argv)
 	}
 
 	std::unordered_map <std::string, std::string> nodeseq;
+	std::unordered_map <std::string, int> nodeIntegerID;
 	std::vector <std::tuple<std::string, std::string, std::string, std::string>> edges; //from, fromstrand, to, tostrand
 
 	std::ifstream ifs (argv[1]);
@@ -109,6 +110,8 @@ int main(int argc, char** argv)
 			sstr >> seq;
 			makeUpperCase (seq);
 			nodeseq[nodename] = seq;
+			int integerId = nodeIntegerID.size()+1; //1-based ids
+			nodeIntegerID[nodename] = integerId;
 		}
 		if (line[0] == 'L')
 		{
@@ -121,7 +124,9 @@ int main(int argc, char** argv)
 			sstr >> toNode; sstr >> toStrand;
 			assert (fromStrand == "+" || fromStrand == "-");
 			assert (toStrand == "+" || toStrand == "-");
-			edges.emplace_back(fromNode, fromStrand, toNode, toStrand);
+			assert (nodeIntegerID.find(fromNode) != nodeIntegerID.end());
+			assert (nodeIntegerID.find(toNode) != nodeIntegerID.end());
+			edges.emplace_back (fromNode, fromStrand, toNode, toStrand);
 		}
 	}
 
@@ -187,9 +192,9 @@ int main(int argc, char** argv)
 	for (auto &s: nodeseq)
 	{
 		if (registerNodeStrand[s.first] == "+")
-			ofs << "S\t" << s.first << "\t" << s.second << "\n";
+			ofs << "S\t" << nodeIntegerID[s.first] << "\t" << s.second << "\n";
 		else 
-			ofs << "S\t" << s.first << "\t" << reverseComplement(s.second) << "\n";
+			ofs << "S\t" << nodeIntegerID[s.first] << "\t" << reverseComplement(s.second) << "\n";
 	}
 
 	for (auto &e: edges)
@@ -200,7 +205,7 @@ int main(int argc, char** argv)
 		toNode = std::get<2>(e); toStrand = std::get<3>(e);
 		assert (registerNodeStrand[fromNode] == fromStrand);
 		assert (registerNodeStrand[toNode] == toStrand);
-		ofs << "L\t" << fromNode << "\t" << "+\t" << toNode << "\t+\t*\n";
+		ofs << "L\t" << nodeIntegerID[fromNode] << "\t" << "+\t" << nodeIntegerID[toNode] << "\t+\t*\n";
 	}
 	return 0;
 }
