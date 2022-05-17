@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <zlib.h>
 
 #include "align.h"
 #include "argparse.h"
@@ -20,11 +21,14 @@
 #include "graph.h"
 #include "io.h"
 #include "trie.h"
+#include "kseq.h"
 
 // A* heuristics
 #include "dijkstra.h"
 #include "astar-prefix.h"
 #include "astar-seeds.h"
+
+KSEQ_INIT(gzFile, gzread)
 
 using namespace std;
 using namespace astarix;
@@ -142,18 +146,25 @@ void wrap_readmap(const read_t& r, string algo, string performance_file, Aligner
 }
 
 void read_queries(std::string query_file, vector<read_t> *R) {
-    read_t r;
-    ifstream query_in(query_file);
+	ifstream query_in(query_file);
 
-    for (int i=0; read_query(query_in, query_file, &r); i++) {
-        R->push_back(r);
-        LOG_INFO_IF(i<5) << "read " << r.comment << ": " << r.s;
-    }
-    LOG_INFO_IF(R->size() >= 5) << " ...and more reads.";
-
-    query_in.close();
-
-    LOG_INFO << R->size() << " reads loaded.";
+	//parse reads
+	read_t r;
+	int l;
+	gzFile fp;
+	kseq_t *seq;
+	fp = gzopen(query_file.c_str(), "r"); //open the file handler
+	seq = kseq_init(fp);
+	while ((l = kseq_read(seq)) >= 0) {
+		std::string id = seq->name.s;
+		std::string readstr = seq->seq.s;
+		std::transform(readstr.begin(), readstr.end(), readstr.begin(), [](unsigned char c){ return std::toupper(c); });
+		r = read_t(readstr, "", id, "");
+		R->push_back(r);
+	}
+	kseq_destroy(seq);
+	gzclose(fp);
+	LOG_INFO << R->size() << " reads loaded.";
 }
 
 int size_sum(const vector<read_t> &R) {

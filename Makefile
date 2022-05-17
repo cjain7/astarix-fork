@@ -31,7 +31,7 @@ DEPS = $(patsubst %, %, $(_DEPS))
 _OBJ = $(SRCDIR)/argparse.o $(SRCDIR)/astar-prefix.o $(SRCDIR)/gfa2graph.o $(SRCDIR)/graph.o $(SRCDIR)/io.o $(SRCDIR)/align.o $(SRCDIR)/utils.o $(SRCDIR)/trie.o $(EXTDIR)/GraphAligner/GfaGraph.o
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
-LINKFLAGS = $(CPPFLAGS) -Wl,-Bstatic $(LIBS) -Wl,-Bdynamic -Wl,--as-needed -lpthread -pthread -static-libstdc++
+LINKFLAGS = $(CPPFLAGS) -Wl,-Bstatic $(LIBS) -Wl,-Bdynamic -Wl,--as-needed -lpthread -pthread -static-libstdc++ -lz
 
 $(shell mkdir -p $(BINDIR))
 $(shell mkdir -p $(ODIR)/src)
