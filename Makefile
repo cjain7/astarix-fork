@@ -39,6 +39,7 @@ $(shell mkdir -p $(ODIR)/ext/GraphAligner)
 
 $(ASTARIXBIN): $(SRCDIR)/astarix.cpp $(DEPS) $(OBJ)
 	$(GPP) $< -o $@ $(OBJ) $(LINKFLAGS)
+	$(GPP) $(LINKFLAGS) $(SRCDIR)/convertGFAToFwdStand.cpp -o $(BINDIR)/convertGFAToFwdStand
 
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(GPP) -c -o $@ $< $(CPPFLAGS)
