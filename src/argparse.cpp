@@ -19,6 +19,7 @@ struct argp_option options[] = {
     { "match",          'M', "MATCH_COST",   0,  "Match penalty [0]" },
     { "subst",          'S', "SUBST_COST",   0,  "Substitution penalty [1]" },
     { "gap",            'G', "GAP_COST",     0,  "Gap (Insertion or Deletion) penalty [5]" },
+    { "max_alignment_cost", 'm', "MAX_ALIGN_COST",     0,  "Maximum alignment cost allowed [5]" },
     { "k_best_alignments", 'k', "TOP_K",     0,  "Output at most k optimal alignments per read [1]" },
     { "threads",        't', "THREADS",      0,  "Number of threads [1]" },
     { "verbose",        'v', "THREADS",      0,  "Verbosity (silent=0, info=1, debug=2), [0]" },
@@ -45,6 +46,7 @@ arguments read_args(int argc, char **argv) {
 
     // Alignment parameters.
     args.costs                 = astarix::EditCosts(0, 1, 5, 5);
+    args.maxAlignmentCost      = 5;
 	args.k_best_alignments     = 1;               // top 5 optimal alignments
 
     // Performance parameters.

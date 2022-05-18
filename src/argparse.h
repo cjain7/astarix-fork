@@ -19,13 +19,14 @@ extern struct argp_option options[];
 /* Used by main to communicate with parse_opt. */
 struct arguments {
     // Input
-	std::string graph_file;
-	std::string query_file;
-	std::string output_dir;
+    std::string graph_file;
+    std::string query_file;
+    std::string output_dir;
 
-	// Alignment parameters
+    // Alignment parameters
     astarix::EditCosts costs;
-	int k_best_alignments;
+    int maxAlignmentCost;
+    int k_best_alignments;
 
     // Performance params
     char *algorithm;

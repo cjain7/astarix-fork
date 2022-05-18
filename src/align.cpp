@@ -70,8 +70,10 @@ std::vector<state_t> Aligner::readmap(const read_t &r, std::string algo, int max
         }
     }
 
-    if (final_states.empty())
-        throw "No alignment.";
+    if (final_states.empty()) {
+        return final_states;
+        //CJ: return empty rather than throwing exception
+    }
 
     assert(final_states.size() >= 1 && (int)final_states.size() <= max_best_alignments);
     LOG_DEBUG << final_states.size() << " best alignments of " << r.comment;

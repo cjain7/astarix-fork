@@ -350,8 +350,7 @@ int exec_astarix(int argc, char **argv) {
     T.precompute.stop();
     cout << "done in " << T.precompute.t.get_sec() << "s." << endl << flush;
 
-    cost_t max_align_cost = 10000000; // args.astar_seeds.max_indels * std::min(args.costs.ins, args.costs.del);  // TODO: set with argument; not used
-    AlignParams align_params(args.costs, args.greedy_match, max_align_cost);
+    AlignParams align_params(args.costs, args.greedy_match, args.maxAlignmentCost);
     string algo = string(args.algorithm);
 
     assert(G.has_supersource());
