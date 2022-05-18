@@ -191,7 +191,9 @@ int main(int argc, char** argv)
 	std::ofstream ofs (argv[2]);
 	for (auto &s: nodeseq)
 	{
-		if (registerNodeStrand[s.first] == "+")
+		if (registerNodeStrand.find(s.first) == registerNodeStrand.end())
+			ofs << "S\t" << nodeIntegerID[s.first] << "\t" << s.second << "\n";
+		else if (registerNodeStrand[s.first] == "+")
 			ofs << "S\t" << nodeIntegerID[s.first] << "\t" << s.second << "\n";
 		else 
 			ofs << "S\t" << nodeIntegerID[s.first] << "\t" << reverseComplement(s.second) << "\n";
