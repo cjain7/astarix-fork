@@ -1,7 +1,8 @@
 ## Changes after fork
 
 * `make` command will produce an additional executable named `convertGFAToFwdStand`. This binary attempts to revise a GFA file to satisfy input requirements/assumptions of `AStarix`. Run it with the following command: `convertGFAToFwdStand gfa-file new-gfa-file`.
-* Use `kseq` library to parse fasta / fastq files.
+* Added `kseq` library to parse fasta / fastq files.
+* Added `--max_alignment_cost` parameter to avoid computing alignments above a certain cost
 
 
 <img width="100" alt="AStarix" align="left" src="https://www.sri.inf.ethz.ch/assets/systems/astarix.png"><br/>
